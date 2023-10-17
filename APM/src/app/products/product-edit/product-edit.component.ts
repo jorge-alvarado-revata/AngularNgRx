@@ -15,6 +15,8 @@ import { NumberValidators } from '../../shared/number.validator';
 import { Store } from '@ngrx/store';
 import { State, getCurrentProduct } from '../state/product.reducer';
 import * as ProductActions from '../state/product.actions';
+import { Observable } from 'rxjs';
+import { tap} from 'rxjs/operators';
 
 
 @Component({
@@ -28,6 +30,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
   product: Product | null;
 
+  product$: Observable<Product>;
 
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
@@ -74,8 +77,8 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     );
      */
     //TODO: Unbsubscribe
-      this.store.select(getCurrentProduct).subscribe(
-        currentProduct => this.displayProduct(currentProduct)
+      this.store.select(getCurrentProduct).pipe(
+        tap(currentProduct => this.displayProduct(currentProduct))
       );
 
 

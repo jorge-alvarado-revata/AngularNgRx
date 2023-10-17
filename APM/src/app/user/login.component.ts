@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { tap } from 'rxjs/operators';
+
 import { AuthService } from './auth.service';
 import { Store } from '@ngrx/store';
 import { State } from  '../../app/state/app.state';
 import {getMaskUserName } from './state/user.reducer';
 
 import * as  UserAction from './state/user.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   templateUrl: './login.component.html',
@@ -17,16 +20,22 @@ export class LoginComponent implements OnInit {
   pageTitle = 'Log In';
 
   maskUserName: boolean;
+  maskUserName$: Observable<boolean>;
+
+
 
   constructor(private authService: AuthService, private router: Router, private store: Store<State>) { }
 
   ngOnInit(): void {
 
         //TODO: Ubsubscribe
-        this.store.select(getMaskUserName).subscribe(
+        /**
+         * 
+         this.store.select(getMaskUserName).subscribe(
           maskUserName => this.maskUserName = maskUserName
         );
-
+         */
+        this.maskUserName$ = this.store.select(getMaskUserName);
   }
 
   cancel(): void {
